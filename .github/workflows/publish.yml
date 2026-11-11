@@ -46,13 +46,22 @@ jobs:
         run: npm pack --dry-run
 
       # 前提：npmjs.com 包 Settings → Trusted Publisher 已登记
-      #   Provider=GitHub Actions, Organization=SantiagoFan, Repository=dsh-wechat-bot, Workflow=publish.yml
-      - name: Publish to npm (Trusted Publishing / OIDC)
+      #   Provider=GitHub Actions, Organization=SantiagoFan, Repository=dsh-wechat-bot,
+      #   Workflow file name=publish.yml, Environment=留空
+      # 若 OIDC 失败且仓库配置了 NPM_TOKEN secret，则自动回退到 token 发布（无 provenance）。
+      - name: Publish to npm
         shell: bash
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           set +e
-          npm publish --access public --provenance --loglevel verbose 2>&1 | tee /tmp/publish.log
+          npm publish --access public --provenance 2>&1 | tee /tmp/publish.log
           code=${PIPESTATUS[0]}
+          if [ "$code" -ne 0 ] && [ -n "${NPM_TOKEN}" ]; then
+            echo "OIDC publish failed; retrying with NPM_TOKEN (without provenance)"
+            NODE_AUTH_TOKEN="${NPM_TOKEN}" npm publish --access public 2>&1 | tee /tmp/publish.log
+            code=${PIPESTATUS[0]}
+          fi
           if [ "$code" -ne 0 ]; then
             echo "::group::npm publish log (tail)"
             tail -n 60 /tmp/publish.log
