@@ -1,4 +1,4 @@
-# @mindlink/wechat-bot
+# @mindlink-ai/wechat-bot
 
 个人微信 bot 的 DSH 插件：把「微信官方 iLink（ClawBot）通道」封装成
 
@@ -12,7 +12,7 @@
 
 | 方式 | 输入 |
 |---|---|
-| npm 包名（推荐，发布后） | `@mindlink/wechat-bot` |
+| npm 包名（推荐，发布后） | `@mindlink-ai/wechat-bot` |
 | GitHub 仓库地址 | `https://github.com/<org>/wechat-bot-plugin` |
 | 本地目录 | 插件目录绝对路径 |
 
@@ -25,14 +25,14 @@
 ```bash
 cd wechat-bot-plugin
 
-# 1) 登录 npm（@mindlink scope 需属于你的 npm 账号或组织）
+# 1) 登录 npm（@mindlink-ai scope 需属于你的 npm 账号或组织）
 npm login
 
 # 2) 发布（包已声明 publishConfig.access=public，scoped 包必须 public）
 npm publish --access public
 
 # 3) 验证
-npm view @mindlink/wechat-bot version
+npm view @mindlink-ai/wechat-bot version
 ```
 
 > 本机 npm 默认源可能指向失效镜像（如旧淘宝源）。发布前确认：
@@ -61,7 +61,7 @@ npm view @mindlink/wechat-bot version
 ## 作者信息
 
 - 作者：思链科技（MindLink）
-- 插件：`@mindlink/wechat-bot` v1.0.0
+- 插件：`@mindlink-ai/wechat-bot` v1.0.0
 - 通道：微信官方 iLink（ClawBot）；本地优先，聊天数据只留在本机
 - 许可：MIT
 

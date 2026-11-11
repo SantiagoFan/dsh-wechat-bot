@@ -1,4 +1,4 @@
 - insert:
     - id: example-wechat-consumer
-      name: '@mindlink/example-wechat-consumer'
+      name: '@mindlink-ai/example-wechat-consumer'
       config: {}

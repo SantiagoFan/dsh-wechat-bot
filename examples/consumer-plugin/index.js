@@ -1,5 +1,5 @@
 /**
- * 示例：其他插件如何调用 @mindlink/wechat-bot 发消息。
+ * 示例：其他插件如何调用 @mindlink-ai/wechat-bot 发消息。
  *
  * 关键点只有两个：
  *   1. 声明 inject: ['wechatBot']，Cordis 会等待该服务可用；

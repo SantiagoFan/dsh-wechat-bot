@@ -1,5 +1,5 @@
 {
-  "name": "@mindlink/wechat-bot",
+  "name": "@mindlink-ai/wechat-bot",
   "version": "1.0.0",
   "private": false,
   "publishConfig": { "access": "public" },

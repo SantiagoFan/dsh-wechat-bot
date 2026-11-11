@@ -1,4 +1,4 @@
 - insert:
     - id: wechat-bot
-      name: '@mindlink/wechat-bot'
+      name: '@mindlink-ai/wechat-bot'
       config: {}

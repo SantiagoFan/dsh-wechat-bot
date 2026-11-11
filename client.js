@@ -5,7 +5,7 @@
  * 面板通过同源 /wechat-bot/* 路由与 Host 通信，不依赖任何 @deepseek-ai Client 包。
  */
 window.__ModuleLoader__.load({
-  id: '@mindlink/wechat-bot',
+  id: '@mindlink-ai/wechat-bot',
   factory(require) {
     const React = require('react')
     const h = React.createElement
@@ -276,7 +276,7 @@ window.__ModuleLoader__.load({
             ),
             h('div', null,
               '插件：',
-              h('span', { style: mono }, '@mindlink/wechat-bot'),
+              h('span', { style: mono }, '@mindlink-ai/wechat-bot'),
               ' · v1.0.0',
             ),
             h('div', null, '通道：微信官方 iLink（ClawBot） · 本地优先，聊天数据只留在本机'),

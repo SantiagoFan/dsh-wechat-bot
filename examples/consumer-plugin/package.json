@@ -1,5 +1,5 @@
 {
-  "name": "@mindlink/example-wechat-consumer",
+  "name": "@mindlink-ai/example-wechat-consumer",
   "version": "1.0.0",
   "private": true,
   "type": "module",
