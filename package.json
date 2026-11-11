@@ -8,6 +8,12 @@
   "type": "module",
   "description": "Personal WeChat bot via the official iLink (ClawBot) channel: sidebar status panel, account info, and an agent tool that pushes the daily brief to your WeChat.",
   "keywords": ["dsh-plugin", "dsh", "wechat", "wechat-bot", "ilink", "clawbot"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SantiagoFan/dsh-wechat-bot.git"
+  },
+  "homepage": "https://github.com/SantiagoFan/dsh-wechat-bot#readme",
+  "bugs": { "url": "https://github.com/SantiagoFan/dsh-wechat-bot/issues" },
   "engines": { "node": ">=20" },
   "exports": {
     ".": "./index.js",

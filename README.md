@@ -13,7 +13,7 @@
 | 方式 | 输入 |
 |---|---|
 | npm 包名（推荐，发布后） | `@mindlink-ai/dsh-wechat-bot` |
-| GitHub 仓库地址 | `https://github.com/<org>/wechat-bot-plugin` |
+| GitHub 仓库地址 | `https://github.com/SantiagoFan/dsh-wechat-bot` |
 | 本地目录 | 插件目录绝对路径 |
 
 安装后左侧边栏出现「微信bot」，工具列表出现 `wechat_*` 工具。
