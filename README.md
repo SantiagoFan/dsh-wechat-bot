@@ -45,23 +45,38 @@ npm view @mindlink-ai/dsh-wechat-bot version
 
 仓库已内置 [`.github/workflows/publish.yml`](.github/workflows/publish.yml)：推送 `v*` 标签时自动校验版本并发布到 npm。
 
-一次性配置：
+> **npm token 有效期限制**：自 2025-10 起，写权限的 granular token **最长 90 天**（新建默认只有 7 天），
+> 所以 CI 里长期放 `NPM_TOKEN` 需要定期轮换。更推荐 **npm Trusted Publishing（OIDC）**：不用任何长期 token，
+> 也就没有 90 天问题，并自动生成 provenance 供应链签名。
 
-1. 在 <https://www.npmjs.com/settings/~/tokens> 生成 **Granular Access Token**：
-   - Permissions: `Read and write`
-   - Packages and scopes: `@mindlink-ai`
-   - **勾选 “Bypass two-factor authentication (2FA)”**
-2. 在 GitHub 仓库 Settings → Secrets and variables → Actions 新建 secret：`NPM_TOKEN` = 上一步的 token。
-3. 之后每次发布：
+#### 方式 A（推荐）：Trusted Publishing（OIDC，无 token）
 
-```bash
-npm version patch          # 自动改版本 + 打 tag（如 v1.0.1）
-git push --follow-tags
-```
+1. 首次发布要先把包发布到 npm（手动一次）：
+   ```bash
+   npm publish --access public --otp=<验证器6位码>
+   ```
+2. 打开 npm 包页面 → Settings → **Trusted Publisher** → 选择 **GitHub Actions**，填写：
+   - Organization / Repository：你的仓库
+   - Workflow file name：`publish.yml`
+3. 仓库无需配置 `NPM_TOKEN`。之后：
+   ```bash
+   npm version patch
+   git push --follow-tags
+   ```
+   Action 通过 OIDC 直接发布（已含 `--provenance`）。
 
-Action 会校验 `tag == package.json version`、`npm pack --dry-run` 验证文件清单，然后 `npm publish --access public`。
+#### 方式 B（备选）：NPM_TOKEN
 
-> 若仓库是私有仓库、或想启用 npm provenance，可在 workflow 的 publish 步骤加 `--provenance` 并给 job 增加 `permissions: id-token: write`（public repository 才支持 provenance）。
+1. 生成 **Granular Access Token**（`Read and write` + 作用域 `@mindlink-ai` + 勾选 **Bypass 2FA**），
+   注意**最长 90 天**，到期需重新生成。
+2. 仓库 Settings → Secrets and variables → Actions 新建 `NPM_TOKEN`。
+3. 把 workflow 的 publish 步骤临时改回 token 模式：
+   ```yaml
+   - name: Publish to npm
+     run: npm publish --access public
+     env:
+       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+   ```
 
 
 ## 首次使用

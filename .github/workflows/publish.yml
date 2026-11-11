@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # npm Trusted Publishing (OIDC) + provenance；无需 NPM_TOKEN
 
 jobs:
   publish:
@@ -37,7 +38,9 @@ jobs:
       - name: Validate package contents
         run: npm pack --dry-run
 
-      - name: Publish to npm
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # 前提：在 npmjs.com 该包 Settings → Trusted Publisher 里登记
+      #   Provider=GitHub Actions, Organization/Repository, Workflow file=publish.yml
+      # 若尚未配置 Trusted Publisher，可临时改为 token 模式：
+      #   env: { NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} }
+      - name: Publish to npm (Trusted Publishing / OIDC)
+        run: npm publish --access public --provenance
