@@ -23,7 +23,6 @@ export const inject = ['tools']
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 const DATA_DIR = process.env.DSH_WECHAT_BOT_DIR || path.join(os.homedir(), '.dsh', 'wechat-bot')
-const LEGACY_DIR = 'E:\\Administrator\\Documents\\daily-news\\wechat'
 const TEXT_LIMIT = 1900
 const RECENT_MAX = 100
 
@@ -80,10 +79,10 @@ export function apply(ctx) {
     targetUserId: '',
     maxChars: TEXT_LIMIT,
     autoStart: true,
-    legacyDir: LEGACY_DIR,
+    legacyDir: '',
     chatForward: true,
     chatSessionId: '',
-    workspaceCwd: 'E:\\Administrator\\Documents',
+    workspaceCwd: os.homedir(),
     ...(readJson(settingsFile) || {}),
   }
   const saveSettings = () => {
@@ -147,9 +146,9 @@ export function apply(ctx) {
   // ------------------------------------------------------------- legacy import
   try {
     const legacy = settings.legacyDir
-    const legacyCred = path.join(legacy, 'secrets', 'credentials.json')
-    const legacyState = path.join(legacy, 'state.json')
-    if (!creds && fs.existsSync(legacyCred)) {
+    const legacyCred = legacy ? path.join(legacy, 'secrets', 'credentials.json') : ''
+    const legacyState = legacy ? path.join(legacy, 'state.json') : ''
+    if (!creds && legacyCred && fs.existsSync(legacyCred)) {
       const value = JSON.parse(fs.readFileSync(legacyCred, 'utf8'))
       if (value?.token) {
         creds = {
@@ -167,7 +166,7 @@ export function apply(ctx) {
         ctx.logger?.info?.('[wechat-bot] imported legacy credentials')
       }
     }
-    const legacyCtx = fs.existsSync(legacyState) ? JSON.parse(fs.readFileSync(legacyState, 'utf8')) : null
+    const legacyCtx = legacyState && fs.existsSync(legacyState) ? JSON.parse(fs.readFileSync(legacyState, 'utf8')) : null
     if (legacyCtx) {
       if (!rt.cursor && typeof legacyCtx.cursor === 'string') rt.cursor = legacyCtx.cursor
       const directs = legacyCtx.directs && typeof legacyCtx.directs === 'object' ? legacyCtx.directs : {}

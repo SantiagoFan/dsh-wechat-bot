@@ -43,6 +43,9 @@ npm view @mindlink/wechat-bot version
 
 ## 首次使用
 
+> 数据与配置目录：`~/.dsh/wechat-bot/`（`credentials.json` / `state.json` / `settings.json` / `push.log`），可用环境变量 `DSH_WECHAT_BOT_DIR` 覆盖。
+> 会话转发的默认工作目录是用户主目录（`os.homedir()`）；如需指定，编辑 `settings.json` 的 `workspaceCwd`，例如 `"workspaceCwd": "D:\\\\projects\\\\wechat-chat"`。
+
 1. 打开左侧边栏「微信bot」→ 点「开始 / 刷新登录」；
 2. 面板出现二维码链接 → 复制到手机微信打开并确认；
 3. 登录成功后，**在微信里给机器人发一条任意消息**（让 bot 记录 `context_token`）；
