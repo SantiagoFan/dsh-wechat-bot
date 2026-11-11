@@ -1,6 +1,6 @@
 {
   "name": "@mindlink-ai/dsh-wechat-bot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "publishConfig": { "access": "public" },
   "author": "思链科技（MindLink）",

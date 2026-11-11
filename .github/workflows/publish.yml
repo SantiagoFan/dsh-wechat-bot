@@ -20,8 +20,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
+
+      # Trusted Publishing / OIDC 需要 npm >= 11.5.1（Node 22 自带的 npm 可能更旧）
+      - name: Ensure npm supports trusted publishing
+        run: |
+          npm install -g npm@latest
+          npm --version
 
       - name: Verify tag matches package version
         shell: bash
@@ -38,9 +44,15 @@ jobs:
       - name: Validate package contents
         run: npm pack --dry-run
 
-      # 前提：在 npmjs.com 该包 Settings → Trusted Publisher 里登记
-      #   Provider=GitHub Actions, Organization/Repository, Workflow file=publish.yml
-      # 若尚未配置 Trusted Publisher，可临时改为 token 模式：
-      #   env: { NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} }
+      # 前提：npmjs.com 包 Settings → Trusted Publisher 已登记
+      #   Provider=GitHub Actions, Organization=SantiagoFan, Repository=dsh-wechat-bot, Workflow=publish.yml
       - name: Publish to npm (Trusted Publishing / OIDC)
-        run: npm publish --access public --provenance
+        shell: bash
+        run: |
+          set +e
+          npm publish --access public --provenance 2>&1 | tee /tmp/publish.log
+          code=${PIPESTATUS[0]}
+          if [ "$code" -ne 0 ]; then
+            echo "::error::npm publish failed (exit ${code}): $(tail -n 1 /tmp/publish.log)"
+            exit "$code"
+          fi
