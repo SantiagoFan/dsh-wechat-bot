@@ -27,7 +27,8 @@ jobs:
       - name: Ensure npm supports trusted publishing
         run: |
           npm install -g npm@latest
-          npm --version
+          echo "npm version: $(npm --version)"
+          echo "registry: $(npm config get registry)"
 
       - name: Verify tag matches package version
         shell: bash
@@ -50,9 +51,15 @@ jobs:
         shell: bash
         run: |
           set +e
-          npm publish --access public --provenance 2>&1 | tee /tmp/publish.log
+          npm publish --access public --provenance --loglevel verbose 2>&1 | tee /tmp/publish.log
           code=${PIPESTATUS[0]}
           if [ "$code" -ne 0 ]; then
-            echo "::error::npm publish failed (exit ${code}): $(tail -n 1 /tmp/publish.log)"
+            echo "::group::npm publish log (tail)"
+            tail -n 60 /tmp/publish.log
+            echo "::endgroup::"
+            # 把关键错误行以 annotation 暴露（公开仓库无需登录即可通过 check-run annotations 看到）
+            grep -E "npm (error|ERR)" /tmp/publish.log | head -n 20 | while IFS= read -r line; do
+              echo "::error::${line}"
+            done
             exit "$code"
           fi
