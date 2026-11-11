@@ -1,0 +1,10 @@
+{
+  "name": "@mindlink/example-wechat-consumer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "示例：一个最小 Host 插件，通过 wechatBot 服务把任意文本/日报推送到个人微信。",
+  "exports": { ".": "./index.js" },
+  "files": ["index.js", "cordis.patch.yml"],
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } }
+}

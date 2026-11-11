@@ -1,0 +1,21 @@
+# dependencies / build output
+node_modules/
+*.log
+data/
+logs/
+
+# local secrets & runtime state
+secrets/
+credentials.json
+state.json
+settings.json
+push.log
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# npm pack artifacts
+*.tgz
