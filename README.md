@@ -6,15 +6,40 @@
 - **Agent 工具**：`wechat_status` / `wechat_login` / `wechat_send` / `wechat_recent`，供定时任务调用把日报推送到你的微信；
 - **同源调试接口**：`/wechat-bot/state`、`/wechat-bot/login`、`/wechat-bot/send`（与 GUI 同端口，无独立端口暴露）。
 
-## 安装
+## 安装（给其他 DSH 用户）
 
-```powershell
-# 在 workspace 目录内
-# DSH 内由插件管理器安装（推荐）：
-#   plugin_manager install_bundle target = E:\Administrator\Documents\wechat-bot-plugin
+在 DSH 的插件管理器（左侧边栏「插件」→ 安装插件）里输入以下任一目标：
+
+| 方式 | 输入 |
+|---|---|
+| npm 包名（推荐，发布后） | `@mindlink/wechat-bot` |
+| GitHub 仓库地址 | `https://github.com/<org>/wechat-bot-plugin` |
+| 本地目录 | 插件目录绝对路径 |
+
+安装后左侧边栏出现「微信bot」，工具列表出现 `wechat_*` 工具。
+
+**运行要求**：DSH Web/桌面 profile（需要 `webServer`、`tools`、`sessionController` 服务）；手机微信需支持 ClawBot 插件；Node ≥ 20（由 DSH 自带，无需另装）。
+
+## 发布到 npm（维护者）
+
+```bash
+cd wechat-bot-plugin
+
+# 1) 登录 npm（@mindlink scope 需属于你的 npm 账号或组织）
+npm login
+
+# 2) 发布（包已声明 publishConfig.access=public，scoped 包必须 public）
+npm publish --access public
+
+# 3) 验证
+npm view @mindlink/wechat-bot version
 ```
 
-安装后左侧边栏出现「微信bot」，工具列表出现 4 个 `wechat_*` 工具。
+> 本机 npm 默认源可能指向失效镜像（如旧淘宝源）。发布前确认：
+> `npm config get registry`，必要时 `npm config set registry https://registry.npmjs.org`。
+> 若遇到 `EPERM` 缓存目录错误，可临时指定可写缓存：`npm publish --cache /tmp/npm-cache`。
+
+升级流程：改代码 → `npm version patch`（或 minor/major）→ `git push --follow-tags` → `npm publish`。
 
 ## 首次使用
 
