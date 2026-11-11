@@ -41,6 +41,29 @@ npm view @mindlink-ai/dsh-wechat-bot version
 
 升级流程：改代码 → `npm version patch`（或 minor/major）→ `git push --follow-tags` → `npm publish`。
 
+### 自动发布（GitHub Actions）
+
+仓库已内置 [`.github/workflows/publish.yml`](.github/workflows/publish.yml)：推送 `v*` 标签时自动校验版本并发布到 npm。
+
+一次性配置：
+
+1. 在 <https://www.npmjs.com/settings/~/tokens> 生成 **Granular Access Token**：
+   - Permissions: `Read and write`
+   - Packages and scopes: `@mindlink-ai`
+   - **勾选 “Bypass two-factor authentication (2FA)”**
+2. 在 GitHub 仓库 Settings → Secrets and variables → Actions 新建 secret：`NPM_TOKEN` = 上一步的 token。
+3. 之后每次发布：
+
+```bash
+npm version patch          # 自动改版本 + 打 tag（如 v1.0.1）
+git push --follow-tags
+```
+
+Action 会校验 `tag == package.json version`、`npm pack --dry-run` 验证文件清单，然后 `npm publish --access public`。
+
+> 若仓库是私有仓库、或想启用 npm provenance，可在 workflow 的 publish 步骤加 `--provenance` 并给 job 增加 `permissions: id-token: write`（public repository 才支持 provenance）。
+
+
 ## 首次使用
 
 > 数据与配置目录：`~/.dsh/wechat-bot/`（`credentials.json` / `state.json` / `settings.json` / `push.log`），可用环境变量 `DSH_WECHAT_BOT_DIR` 覆盖。
